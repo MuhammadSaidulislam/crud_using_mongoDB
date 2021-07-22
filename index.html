@@ -18,18 +18,21 @@
     <div id="productShow"></div>
     <div id="update"></div>
     <script>
-      fetch("/products")
+      function allProduct(){
+        fetch("/products")
         .then((res) => res.json())
         .then((products) => {
           console.log(products);
           const productShow = document.getElementById("productShow");
-
+          productShow.innerHTML='';
           products.forEach((pd) => {
             const p = document.createElement("p");
             p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=updateProduct('${pd._id}')>Update</button> <button type="submit" onClick=deleteProduct('${pd._id}')>Delete</button>`;
             productShow.appendChild(p);
           });
         });
+      }
+      allProduct();
       // update product
       function updateProduct(id) {
         fetch(`product/${id}`)
@@ -39,9 +42,9 @@
             update.innerHTML = `
           <h1>Updating Info id ${data._id}</h1>
           <input type="text" value="${data.name}" id="name" />
-      <input type="text" value="${data.price}" id="price" />
-      <input type="text" value="${data.quantity}" id="quantity" />
-      <button type="submit" onClick="editProduct('${data._id}')">Update</button>
+          <input type="text" value="${data.price}" id="price" />
+          <input type="text" value="${data.quantity}" id="quantity" />
+          <button type="submit" onClick="editProduct('${data._id}')">Update</button>
           `;
           });
       }
@@ -54,12 +57,15 @@
         const product = { id, name, price, quantity };
         fetch(`update/${id}`, {
           method: "PATCH",
-          headers: {'Content-type': 'application/json'},
-          body: JSON.stringify(product)
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(product),
         })
-          .then(res => res.json())
-          .then(result => console.log('updated'));
-      
+          .then((res) => res.json())
+          .then((result) =>{
+            if(result){
+              allProduct();
+            }
+          });
       }
 
       // delete function
@@ -68,7 +74,12 @@
           method: "DELETE",
         })
           .then((res) => res.json())
-          .then((result) => console.log(result));
+          .then((result) => 
+          {
+            if(result){
+              event.target.parentNode.style.display='none';
+            }
+          });
       }
     </script>
   </body>

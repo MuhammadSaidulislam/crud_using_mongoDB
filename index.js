@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const ObjectId= require('mongodb').ObjectId;
+const ObjectId = require("mongodb").ObjectId;
 
 const app = express();
 app.use(cors());
@@ -25,54 +25,62 @@ app.get("/", (req, res) => {
 client.connect((err) => {
   const collection = client.db("organicdb").collection("product");
   // data receive from mongodb to ui
-  app.get('/products',(req,res)=>{
-    collection.find({})
-    .toArray((err,documents)=>{
+  app.get("/products", (req, res) => {
+    collection.find({}).toArray((err, documents) => {
       res.send(documents);
-    })
-  })
-// data send to mongodb from ui
-  app.post("/addProduct", (req, res) => {
-    const product = req.body;
-    collection.insertOne(product)
-    .then(result => {
-      console.log("data send");
-      res.send("Success");
     });
   });
 
-// data delete
-  app.delete("/delete/:id",(req,res)=>{
+  // data send to mongodb from ui
+  app.post("/addProduct", (req, res) => {
+    const product = req.body;
+    collection.insertOne(product).then((result) => {
+      console.log("data send");
+      // res.send("Success");
+      res.redirect("/");
+    });
+  });
+
+  // data delete
+  app.delete("/delete/:id", (req, res) => {
     console.log(req.params.id);
-    collection.deleteOne({_id: ObjectId(req.params.id)})
-    .then(result=>{
-      console.log(result);
-    })
-  })
+    collection.deleteOne({ _id: ObjectId(req.params.id) })
+    .then((result) => {
+      res.send(result.deletedCount>0)
+    });
+  });
 
   // data show
-  app.get("/product/:id",(req,res)=>{
-    collection.find({_id: ObjectId(req.params.id)})
-    .toArray((err,documents)=>{
-      res.send(documents[0]);
-    })
-  })
+  app.get("/product/:id", (req, res) => {
+    collection
+      .find({ _id: ObjectId(req.params.id) })
+      .toArray((err, documents) => {
+        res.send(documents[0]);
+      });
+  });
   console.log("Database update");
 
   // data update
 
-  app.patch('/update/:id',(req,res)=>{
+  app.patch("/update/:id", (req, res) => {
     console.log(req.body.quantity);
-    collection.updateOne({_id: ObjectId(req.params.id)},
-    {
-      $set:{name: req.body.name,price: req.body.price, quantity:req.body.quantity}
-    })
-    .then(result=>{
-      console.log(result);
-    })
-  })
-
-  
+    collection
+      .updateOne(
+        { _id: ObjectId(req.params.id) },
+        {
+          $set: {
+            name: req.body.name,
+            price: req.body.price,
+            quantity: req.body.quantity,
+          },
+        }
+      )
+      .then((result) => {
+        if(result){
+          res.send(result.modifiedCount>0)
+        }
+      });
+  });
 });
 
 app.listen(4200, () => console.log("listening port 4200"));
