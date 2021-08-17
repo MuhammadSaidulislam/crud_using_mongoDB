@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Mongodb data pass!!</h1>
     <form action="/addProduct" method="post">
-        <input type="text" placeholder="product name" name="name">
-        <input type="text" placeholder="product price" name="price">
-        <input type="text" placeholder="product quantity" name="quantity">
-        <button type="submit">Submit</button>
+      <input type="text" placeholder="product name" name="name" />
+      <input type="text" placeholder="product price" name="price" />
+      <input type="text" placeholder="product quantity" name="quantity" />
+      <button type="submit">Submit</button>
     </form>
-</body>
+
+    <div id="productShow"></div>
+
+    <script>
+      fetch("/products")
+        .then(res=> res.json())
+        .then(products => {
+          const productShow = document.getElementById("productShow");
+          products.forEach((pd) => {
+            const p = document.createElement("p");
+            p.innerHTML = `${pd.name}`;
+            productShow.appendChild(p);
+          });
+        });
+    </script>
+  </body>
 </html>

@@ -23,8 +23,14 @@ app.get("/", (req, res) => {
 // mongodb client connected
 client.connect((err) => {
   const collection = client.db("organicdb").collection("product");
-  // perform actions on the collection object
-
+  // data receive from mongodb to ui
+  app.get('/products',(req,res)=>{
+    collection.find({}).limit(4)
+    .toArray((err,documents)=>{
+      res.send(documents);
+    })
+  })
+// data send to mongodb from ui
   app.post("/addProduct", (req, res) => {
     const product = req.body;
     collection.insertOne(product)
@@ -36,12 +42,5 @@ client.connect((err) => {
 
   console.log("Database update");
 });
-
-// const user = ["one", "userOne", "userTwo", "userthree", "userFour"];
-// app.get("/user/:id", (req, res) => {
-//   const id = req.params.id;
-//   const name = user[id];
-//   res.send({ name, id });
-// });
 
 app.listen(4200, () => console.log("listening port 4200"));
