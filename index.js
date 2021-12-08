@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const ObjectId= require('mongodb').ObjectId;
 
 const app = express();
 app.use(cors());
@@ -25,7 +26,7 @@ client.connect((err) => {
   const collection = client.db("organicdb").collection("product");
   // data receive from mongodb to ui
   app.get('/products',(req,res)=>{
-    collection.find({}).limit(4)
+    collection.find({})
     .toArray((err,documents)=>{
       res.send(documents);
     })
@@ -40,6 +41,14 @@ client.connect((err) => {
     });
   });
 
+
+  app.delete("/delete/:id",(req,res)=>{
+    console.log(req.params.id);
+    collection.deleteOne({_id: ObjectId(req.params.id)})
+    .then(result=>{
+      console.log(result);
+    })
+  })
   console.log("Database update");
 });
 

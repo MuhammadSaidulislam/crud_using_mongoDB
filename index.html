@@ -19,15 +19,25 @@
 
     <script>
       fetch("/products")
-        .then(res=> res.json())
-        .then(products => {
+        .then((res) => res.json())
+        .then((products) => {
+          console.log(products);
           const productShow = document.getElementById("productShow");
+          
           products.forEach((pd) => {
             const p = document.createElement("p");
-            p.innerHTML = `${pd.name}`;
+            p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=deleteProduct('${pd._id}')>Delete</button>`;
             productShow.appendChild(p);
           });
         });
+
+      function deleteProduct(id) {
+        fetch(`delete/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
+      }
     </script>
   </body>
 </html>
