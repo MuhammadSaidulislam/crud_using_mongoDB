@@ -41,12 +41,20 @@ client.connect((err) => {
     });
   });
 
-
+// data delete
   app.delete("/delete/:id",(req,res)=>{
     console.log(req.params.id);
     collection.deleteOne({_id: ObjectId(req.params.id)})
     .then(result=>{
       console.log(result);
+    })
+  })
+
+  // data show
+  app.get("/product/:id",(req,res)=>{
+    collection.find({_id: ObjectId(req.params.id)})
+    .toArray((err,documents)=>{
+      res.send(documents[0]);
     })
   })
   console.log("Database update");

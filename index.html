@@ -16,21 +16,50 @@
     </form>
 
     <div id="productShow"></div>
-
+    <div id="update"></div>
     <script>
       fetch("/products")
         .then((res) => res.json())
         .then((products) => {
           console.log(products);
           const productShow = document.getElementById("productShow");
-          
+
           products.forEach((pd) => {
             const p = document.createElement("p");
-            p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=deleteProduct('${pd._id}')>Delete</button>`;
+            p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=updateProduct('${pd._id}')>Update</button> <button type="submit" onClick=deleteProduct('${pd._id}')>Delete</button>`;
             productShow.appendChild(p);
           });
         });
+      // update product
+      function updateProduct(id) {
+        fetch(`product/${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            const update = document.getElementById("update");
+            update.innerHTML = `
+          <h1>Updating Info id ${data._id}</h1>
+          <input type="text" value="${data.name}" id="productName" />
+      <input type="text" value="${data.price}" id="price" />
+      <input type="text" value="${data.quantity}" id="quantity" />
+      <button type="submit" onClick="editProduct('${data._id}')">Update</button>
+          `;
+          });
+      }
 
+      // edit product info
+      function editProduct(id) {
+        const productName = document.getElementById("productName").value;
+        const price = document.getElementById("price").value;
+        const quantity = document.getElementById("quantity").value;
+        const product = { id, productName, price, quantity };
+        fetch(`product/${id}`, {
+          method: "patch",
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
+      }
+
+      // delete function
       function deleteProduct(id) {
         fetch(`delete/${id}`, {
           method: "DELETE",
