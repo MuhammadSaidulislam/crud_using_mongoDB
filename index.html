@@ -53,10 +53,13 @@
         const quantity = document.getElementById("quantity").value;
         const product = { id, productName, price, quantity };
         fetch(`product/${id}`, {
-          method: "patch",
+          method: "Patch",
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify(product)
         })
           .then((res) => res.json())
           .then((result) => console.log(result));
+      
       }
 
       // delete function

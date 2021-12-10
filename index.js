@@ -58,6 +58,9 @@ client.connect((err) => {
     })
   })
   console.log("Database update");
+
+
+  
 });
 
 app.listen(4200, () => console.log("listening port 4200"));
