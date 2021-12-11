@@ -38,7 +38,7 @@
             const update = document.getElementById("update");
             update.innerHTML = `
           <h1>Updating Info id ${data._id}</h1>
-          <input type="text" value="${data.name}" id="productName" />
+          <input type="text" value="${data.name}" id="name" />
       <input type="text" value="${data.price}" id="price" />
       <input type="text" value="${data.quantity}" id="quantity" />
       <button type="submit" onClick="editProduct('${data._id}')">Update</button>
@@ -48,17 +48,17 @@
 
       // edit product info
       function editProduct(id) {
-        const productName = document.getElementById("productName").value;
+        const name = document.getElementById("name").value;
         const price = document.getElementById("price").value;
         const quantity = document.getElementById("quantity").value;
-        const product = { id, productName, price, quantity };
-        fetch(`product/${id}`, {
-          method: "Patch",
+        const product = { id, name, price, quantity };
+        fetch(`update/${id}`, {
+          method: "PATCH",
           headers: {'Content-type': 'application/json'},
           body: JSON.stringify(product)
         })
-          .then((res) => res.json())
-          .then((result) => console.log(result));
+          .then(res => res.json())
+          .then(result => console.log('updated'));
       
       }
 
