@@ -27,7 +27,7 @@
           productShow.innerHTML='';
           products.forEach((pd) => {
             const p = document.createElement("p");
-            p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=updateProduct('${pd._id}')>Update</button> <button type="submit" onClick=deleteProduct('${pd._id}')>Delete</button>`;
+            p.innerHTML = `<strong>Product Name: </strong> ${pd.name} <br/> <strong>Product Price:</strong> ${pd.price} <br/> <strong>Product Quantity:</strong> ${pd.quantity} <button type="submit" onClick=updateProduct('${pd._id}')>Update</button> <button type="submit" onClick=deleteProduct(event,'${pd._id}')>Delete</button>`;
             productShow.appendChild(p);
           });
         });
@@ -64,22 +64,26 @@
           .then((result) =>{
             if(result){
               allProduct();
+              document.getElementById("update").innerHTML='';
             }
           });
       }
 
       // delete function
-      function deleteProduct(id) {
+      function deleteProduct(event,id) {
         fetch(`delete/${id}`, {
           method: "DELETE",
         })
-          .then((res) => res.json())
-          .then((result) => 
+          .then(res => res.json())
+          .then(result => 
           {
             if(result){
-              event.target.parentNode.style.display='none';
+               event.target.parentNode.style.display='none';
+              console.log(result);
             }
-          });
+            
+          }
+          );
       }
     </script>
   </body>
