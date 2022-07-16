@@ -9,8 +9,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // mongodb setting
 const { MongoClient } = require("mongodb");
-const uri =
-  "mongodb+srv://Saidul:tnyn9EdEQgj1JqB2@cluster0.npcff.mongodb.net/organicdb?retryWrites=true&w=majority";
+
+const uri = "mongodb+srv://Saidul:tnyn9EdEQgj1JqB2@cluster0.npcff.mongodb.net/organicdb?retryWrites=true&w=majority";
+
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -44,9 +45,9 @@ client.connect((err) => {
   // data delete
   app.delete("/delete/:id", (req, res) => {
     collection.deleteOne({ _id: ObjectId(req.params.id) })
-    .then(result => {
-      res.send(result.deletedCount>0)
-    });
+      .then(result => {
+        res.send(result.deletedCount > 0)
+      });
   });
 
   // data show
@@ -75,8 +76,8 @@ client.connect((err) => {
         }
       )
       .then((result) => {
-        if(result){
-          res.send(result.modifiedCount>0)
+        if (result) {
+          res.send(result.modifiedCount > 0)
         }
       });
   });

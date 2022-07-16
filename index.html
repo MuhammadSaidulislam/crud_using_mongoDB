@@ -11,34 +11,42 @@
 
   <title>Document</title>
   <style>
-    .productCard{
+    .productCard {
       text-align: center;
       padding: 20px 0px;
       box-shadow: 1px 1px 5px -2px #aca4a4;
     }
-    .productCard h1{
+
+    .productCard h1 {
       font-size: 16px;
     }
-    .productCard h2{
+
+    .productCard h2 {
       font-size: 15px;
     }
-    .productCard h3{
+
+    .productCard h3 {
       font-size: 14px;
     }
-    .productCard button{
+
+    .productCard button {
       font-size: 13px;
     }
-    .productAdd{
+
+    .productAdd {
       padding: 5px 40px;
     }
-    .productAdd h2{
+
+    .productAdd h2 {
       font-size: 21px;
       font-weight: 600;
     }
-    #update{
+
+    #update {
       padding: 5px 40px;
     }
-    #update h2{
+
+    #update h2 {
       font-size: 21px;
       font-weight: 600;
     }
@@ -46,25 +54,25 @@
 </head>
 
 <body>
-  <h1 class="text-center text-bold">CRUD Operation using mongoDB</h1>
+
+
+  <h1 class="text-center text-bold mt-5 mb-5">CRUD Operation using mongoDB Cluster</h1>
   <div class="container">
     <div class="row">
       <div class="col-6 productAdd">
         <form action="/addProduct" method="post">
           <h2 class="text-center">Product Add</h2>
-          <input class="form-control" type="text" placeholder="product name" name="name" />
-          <input class="form-control mt-2" type="text" placeholder="product price" name="price" />
-          <input class="form-control mt-2" type="text" placeholder="product quantity" name="quantity" />
-          <button class="btn btn-info mt-2" type="submit">Submit</button>
+          <input class="form-control" type="text" placeholder="product name" name="name" required />
+          <input class="form-control mt-2" type="number" placeholder="product price" name="price" required />
+          <input class="form-control mt-2" type="number" placeholder="product quantity" name="quantity" required />
+          <button class="btn btn-success mt-2" type="submit">Add product</button>
         </form>
       </div>
       <div class="col-6">
         <div id="update"></div>
       </div>
     </div>
-    <div class="row mt-5" id="productShow">
-
-    </div>
+    <div class="row mt-5" id="productShow"></div>
   </div>
 
 
@@ -85,7 +93,7 @@
           productShow.innerHTML = '';
           products.forEach((pd) => {
             const p = document.createElement("div");
-            p.className = 'col-4';
+            p.className = 'col-4 productInfo';
             p.innerHTML = `<div class="productCard"><h1><strong>Product Name: </strong> ${pd.name}</h1><h2><strong>Product Price:</strong> ${pd.price}</h2><h3><strong>Product Quantity:</strong> ${pd.quantity}</h3> <button class="btn btn-primary" type="submit" onClick=updateProduct('${pd._id}')>Update</button> <button class="btn btn-danger" type="submit" onClick=deleteProduct(event,'${pd._id}')>Delete</button></div>`;
             productShow.appendChild(p);
           });
@@ -100,9 +108,9 @@
           const update = document.getElementById("update");
           update.innerHTML = `
           <h2 class="text-center">Product Update</h2>
-          <input class="form-control" type="text" value="${data.name}" id="name" />
-          <input class="form-control mt-2" type="text" value="${data.price}" id="price" />
-          <input class="form-control mt-2" type="text" value="${data.quantity}" id="quantity" />
+          <input class="form-control" type="text" value="${data.name}" id="name" required />
+          <input class="form-control mt-2" type="text" value="${data.price}" id="price" required />
+          <input class="form-control mt-2" type="text" value="${data.quantity}" id="quantity" required />
           <button class="btn btn-success mt-2" type="submit" onClick="editProduct('${data._id}')">Update</button>
           `;
         });
@@ -137,7 +145,7 @@
         .then(result => {
           if (result) {
             event.target.parentNode.style.display = 'none';
-            console.log(result);
+            console.log('target', event.target);
           }
 
         }
