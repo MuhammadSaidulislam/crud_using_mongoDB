@@ -151,6 +151,21 @@
         }
         );
     }
+     // delete function
+     function deleteProduct(event, id) {
+      fetch(`delete/${id}`, {
+        method: "DELETE",
+      })
+        .then(res => res.json())
+        .then(result => {
+          if (result) {
+            event.target.parentNode.style.display = 'none';
+            console.log('target', event.target);
+          }
+
+        }
+        );
+    }
   </script>
 </body>
 
